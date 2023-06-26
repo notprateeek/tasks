@@ -37,9 +37,13 @@ export const updateTask = async (req, res, next) => {
       return next(createError({ status: 401, message: 'Not your task' }))
     }
 
-    const updatedTask = await Task.findByIdAndUpdate(req.params.id, {
-      status: req.body.status,
-    })
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      {
+        status: req.body.status,
+      },
+      { new: true },
+    )
     return res.status(200).json(updatedTask)
   } catch (error) {
     return next(error)

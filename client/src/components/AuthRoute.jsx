@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth'
 
 function AuthRoute() {
   const { auth } = useAuth()
-  if (auth === undefined) return 'loading...' // spinner
+  if (auth === undefined) return 'loading...'
 
   return auth ? <Outlet /> : <Navigate to='/' />
 }

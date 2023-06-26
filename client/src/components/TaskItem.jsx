@@ -1,35 +1,59 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Checkbox } from '@chakra-ui/react'
+// eslint-disable-next-line object-curly-newline
+import { Checkbox, Button, HStack, Stack, Box } from '@chakra-ui/react'
 
 function Tasks({ task, tasks, setTasks }) {
-  const [status, toggleStatus] = useState(task.status)
-  async function handleCheck(taskId) {
-    await axios.put(`api/tasks/${taskId}`, status)
-    toggleStatus(!status)
+  const [checked, setChecked] = useState(task.status)
+
+  const handleCheck = (taskId) => {
+    setChecked(!checked)
+    const status = {
+      status: checked,
+    }
+    axios.put(`api/tasks/${taskId}`, status)
   }
 
-  async function handleDelete(taskId) {
+  const handleDelete = async (taskId) => {
     await axios.delete(`api/tasks/${taskId}`)
-    setTasks(tasks.filter((id) => id !== task._id))
-    // check above later
+    setTasks(tasks.filter((item) => taskId !== item._id))
   }
 
   return (
-    <>
-      <div>
+    <HStack mt={4}>
+      <Box
+        w={{
+          base: '75%',
+          md: '80%',
+        }}
+      >
         <Checkbox
-          isChecked={status}
+          colorScheme='green'
+          isChecked={checked}
           onChange={() => handleCheck(task._id)}
-          tabIndex={-1}
         >
           {task.title}
         </Checkbox>
-      </div>
-      <button type='button' onClick={() => handleDelete(task._id)}>
-        remove
-      </button>
-    </>
+      </Box>
+      <Stack
+        w={{
+          base: '25%',
+          md: '20%',
+        }}
+        justify='flex-end'
+        direction='row'
+      >
+        <Button
+          colorScheme='red'
+          variant='outline'
+          size='xs'
+          onClick={() => handleDelete(task._id)}
+        >
+          Remove
+        </Button>
+      </Stack>
+    </HStack>
   )
 }
+
 export default Tasks

@@ -47,7 +47,8 @@ function AuthForm({ setUserId }) {
 
     if (isSignup) {
       try {
-        const res = await axios.post('/api/auth/signup', user)
+        await axios.post('/api/auth/signup', user)
+        const res = await axios.post('/api/auth/signin', user)
         setUserId(res.data.id)
         navigate('/tasks')
       } catch (error) {

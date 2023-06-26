@@ -28,13 +28,15 @@ function TaskForm({ userId, tasks, setTasks }) {
   } = useForm({ resolver: zodResolver(schema) })
 
   const onSubmit = async (values) => {
-    const newTask = {
+    let newTask = {
       title: values.description,
       user: userId,
       status: false,
     }
     try {
-      await axios.post('/api/tasks/create', newTask)
+      await axios.post('/api/tasks/create', newTask).then((res) => {
+        newTask = res.data
+      })
       setTasks([newTask, ...tasks])
       reset()
     } catch (error) {
